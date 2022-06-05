@@ -1,18 +1,17 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.knatsuki.intellijpluginscopeactions</id>
-    <name>intellij-plugin-scope-actions</name>
-    <vendor>knatsuki</vendor>
+    <id>com.mukatalab.scopeActions</id>
+    <name>Scope Actions</name>
+    <vendor email="kuni.natsuki@gmail.com">mukatalab</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.knatsuki.intellijpluginscopeactions.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.knatsuki.intellijpluginscopeactions.services.MyProjectService"/>
+        <projectService serviceImplementation="com.mukatalab.scopeActions.services.ScopeActionsProjectConfigService"/>
+        <projectConfigurable
+                parentId="tools"
+                instance="com.mukatalab.scopeActions.settings.ScopeActionsProjectSettingsConfigurable"
+                id="com.mukatalab.scopeActions.settings.ScopeActionsProjectSettingsConfigurable"
+        />
     </extensions>
-
-    <applicationListeners>
-        <listener class="com.github.knatsuki.intellijpluginscopeactions.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
 </idea-plugin>

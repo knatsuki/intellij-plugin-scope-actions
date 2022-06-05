@@ -1,4 +1,4 @@
-package com.github.knatsuki.intellijpluginscopeactions
+package com.mukatalab.scopeActions
 
 import com.intellij.ide.highlighter.XmlFileType
 import com.intellij.psi.xml.XmlFile

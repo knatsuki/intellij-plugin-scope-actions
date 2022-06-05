@@ -1,4 +1,4 @@
-package com.github.knatsuki.intellijpluginscopeactions
+package com.mukatalab.scopeActions
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls
