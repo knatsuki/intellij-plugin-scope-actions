@@ -11,9 +11,13 @@ import com.intellij.openapi.project.Project
 /**
  * Project service for storing/retrieving configuration for Scope Actions plugin
  */
-class ScopeActionsProjectConfigService : PersistentStateComponent<ScopeActionsProjectConfigState> {
+class ScopeActionsProjectConfigService() :
+    PersistentStateComponent<ScopeActionsProjectConfigState> {
     private var _state: ScopeActionsProjectConfigState = ScopeActionsProjectConfigState()
-    private val actionTypes = listOf("ShowUsageByScope", "FindUsageByScope")
+    private val actionTypes = listOf("ShowUsagesByScope", "FindUsagesByScope")
+
+    val availableScopeActionTypes: List<String>
+        get() = actionTypes
 
     fun setState(value: ScopeActionsProjectConfigState) {
         _state = value
@@ -34,6 +38,4 @@ class ScopeActionsProjectConfigService : PersistentStateComponent<ScopeActionsPr
         }
     }
 
-    val availableScopeActionTypes: List<String>
-        get() = actionTypes
 }

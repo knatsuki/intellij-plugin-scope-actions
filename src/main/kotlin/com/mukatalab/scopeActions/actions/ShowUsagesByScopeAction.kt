@@ -10,7 +10,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.NlsActions
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.SearchScope
-import com.intellij.psi.search.SearchScopeProvider
+import com.mukatalab.scopeActions.actions.ScopeAnAction
+import com.mukatalab.scopeActions.notifyError
+import com.mukatalab.scopeActions.notifyPotentiallyMissingSdk
 import javax.swing.Icon
 
 /**
@@ -42,33 +44,21 @@ import javax.swing.Icon
  * @see com.intellij.find.actions.ShowUsagesAction
  */
 class ShowUsagesByScopeAction(
-    private val scopeName: String,
+    scope: SearchScope,
     text: @NlsActions.ActionText String?,
-    description: @NlsActions.ActionDescription String?,
-    icon: Icon?
-) : AnAction(text, description, icon) {
-    constructor() : this("dummy", null, null, null)
-
+    description: @NlsActions.ActionDescription String? = null,
+    icon: Icon? = null
+) : ScopeAnAction(scope, text, description, icon) {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val dataContext = e.dataContext
-        val psiEl = e.getData(CommonDataKeys.PSI_ELEMENT) ?: return
+        val psiEl = e.getData(CommonDataKeys.PSI_ELEMENT) ?: run {
+            notifyPotentiallyMissingSdk(project)
+            return
+        }
 
-        val searchScope = getSearchScope(project, dataContext) ?: return
-        val options = getFindUsagesOptions(project, psiEl, dataContext) ?: return
-        options.searchScope = searchScope
-
+        updateFindUsagesOptionsWithScope(project, psiEl, dataContext)
         ActionManager.getInstance().getAction(ShowUsagesAction.ID).actionPerformed(e)
-    }
-
-    private fun getSearchScope(
-        project: Project,
-        dataContext: DataContext
-    ): SearchScope? {
-        val userDefinedSearchScopeProvider =
-            SearchScopeProvider.EP_NAME.extensions.find { it.displayName == "Other" } ?: return null
-        val scopes = userDefinedSearchScopeProvider.getSearchScopes(project, dataContext)
-        return scopes.find { searchScope -> searchScope.displayName == scopeName }
     }
 
     private fun getFindUsagesOptions(
@@ -83,5 +73,14 @@ class ShowUsagesByScopeAction(
         return handler.getFindUsagesOptions(dataContext)
     }
 
+    private fun updateFindUsagesOptionsWithScope(
+        project: Project,
+        psiEl: PsiElement,
+        dataContext: DataContext
+    ) {
+        getFindUsagesOptions(project, psiEl, dataContext)?.let {
+            it.searchScope = scope
+        } ?: notifyError(project, "Failed to retrieve Find Usages Options.")
+    }
 
 }

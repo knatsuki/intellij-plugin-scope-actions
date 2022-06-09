@@ -14,7 +14,7 @@ class ScopeActionsProjectSettingsConfigurable(private val project: Project) : Co
         ScopeActionsProjectConfigService.getInstance(project)
 
     override fun getDisplayName(): String {
-        return "Scope Actions Configuration"
+        return "Scope Actions"
     }
 
     override fun createComponent(): JComponent? {

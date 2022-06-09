@@ -7,6 +7,7 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup displayType="BALLOON" id="Scope Actions Notification"/>
         <projectService serviceImplementation="com.mukatalab.scopeActions.services.ScopeActionsProjectConfigService"/>
         <projectConfigurable
                 parentId="tools"
@@ -14,4 +15,10 @@
                 id="com.mukatalab.scopeActions.settings.ScopeActionsProjectSettingsConfigurable"
         />
     </extensions>
+    <actions>
+        <group id="com.mukatalab.scopeActions.actions.FindUsagesByScopeActionGroup"
+               class="com.mukatalab.scopeActions.actions.FindUsagesByScopeActionGroup" text="Find Usages By Scope">
+            <add-to-group group-id="FindUsagesMenuGroup" anchor="last"/>
+        </group>
+    </actions>
 </idea-plugin>
