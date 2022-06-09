@@ -13,7 +13,6 @@ import com.intellij.ui.dsl.gridLayout.VerticalAlign
 import com.intellij.ui.scale.JBUIScale
 import com.intellij.ui.table.JBTable
 import com.mukatalab.scopeActions.services.ScopeActionsProjectConfigState
-import javax.swing.DefaultListModel
 import javax.swing.JComponent
 import javax.swing.JList
 import javax.swing.ListModel
@@ -21,45 +20,58 @@ import javax.swing.ListSelectionModel
 import javax.swing.event.ListSelectionEvent
 import javax.swing.event.ListSelectionListener
 
-class ScopeActionsProjectSettingsView(private var scopes: List<SearchScope>, scopeActionTypes: List<String>) {
-    private val scopeListModel: DefaultListModel<SearchScope>
-    private val scopeActionsTableModel: ScopeActionsTableModel
+class ScopeActionsProjectSettingsView(private val scopes: List<SearchScope>, val scopeActionTypes: List<String>) {
+    private var _scopeActionsProjectConfigState: ScopeActionsProjectConfigState
 
     var scopeActionsProjectConfigState: ScopeActionsProjectConfigState
-        get() {
-            return scopeActionsTableModel.scopeActionsProjectConfigState
-        }
+        get() = _scopeActionsProjectConfigState
         set(value) {
-            scopeActionsTableModel.scopeActionsProjectConfigState = value
+            _scopeActionsProjectConfigState = value
+            resetScopeActionsTableComponent(value)
         }
 
     //    Managed JComponents
-    private val scopeActionsDetailTableComponent: JBTable
+    private val mainSplitterComponent: OnePixelSplitter
     private val scopeListComponent: JBList<SearchScope>
     val mainPanelComponent: DialogPanel
 
     init {
+        _scopeActionsProjectConfigState = ScopeActionsProjectConfigState()
         val selectedScope: SearchScope = scopes.first()
 
-        scopeListModel = JBList.createDefaultListModel(scopes)
-        scopeActionsTableModel = ScopeActionsTableModel(selectedScope, scopeActionTypes)
-
-        scopeListComponent = buildScopeListComponent(scopeListModel).apply {
+        scopeListComponent = buildScopeListComponent(JBList.createDefaultListModel(scopes)).apply {
             selectionMode = ListSelectionModel.SINGLE_SELECTION
             setSelectedValue(selectedScope, true)
             addListSelectionListener(object : ListSelectionListener {
                 override fun valueChanged(e: ListSelectionEvent?) {
-                    val selectedIndex = e?.lastIndex ?: return
-                    scopeActionsTableModel.selectedScope = scopes[selectedIndex]
+                    if (e?.valueIsAdjusting != false) return
+                    resetScopeActionsTableComponent()
                 }
 
             })
         }
-        scopeActionsDetailTableComponent = buildScopeActionsDetailTableComponent(scopeActionsTableModel)
-        mainPanelComponent = buildMainDialogComponent(scopeListComponent, scopeActionsDetailTableComponent)
+        val scopeActionsDetailTableComponent = buildScopeActionsDetailTableComponent(
+            selectedScope,
+            scopeActionsProjectConfigState,
+            scopeActionTypes
+        )
+        mainSplitterComponent = OnePixelSplitter(false, 0.2f).apply {
+            firstComponent = scopeListComponent
+            secondComponent = scopeActionsDetailTableComponent
+        }
+        mainPanelComponent = buildMainDialogComponent(mainSplitterComponent)
     }
 
-    val preferredFocusedComponent: JComponent get() = scopeListComponent
+    val preferredFocusedComponent: JComponent get() = mainSplitterComponent.firstComponent
+
+    fun resetScopeActionsTableComponent(state: ScopeActionsProjectConfigState? = null) {
+        mainSplitterComponent.secondComponent =
+            buildScopeActionsDetailTableComponent(
+                scopeListComponent.selectedValue,
+                state ?: scopeActionsProjectConfigState,
+                scopeActionTypes
+            )
+    }
 }
 
 /**
@@ -85,8 +97,18 @@ private fun buildScopeListComponent(listModel: ListModel<SearchScope>): JBList<S
 /**
  * Build the scope table component on the right panel
  */
-private fun buildScopeActionsDetailTableComponent(tableModel: ScopeActionsTableModel): JBTable {
-    return JBTable(tableModel).apply {
+private fun buildScopeActionsDetailTableComponent(
+    selectedScope: SearchScope,
+    scopeActionsProjectConfigState: ScopeActionsProjectConfigState,
+    scopeActionTypes: List<String>
+): JComponent {
+    val table = JBTable(
+        ScopeActionsTableModel(
+            selectedScope,
+            scopeActionsProjectConfigState,
+            scopeActionTypes
+        )
+    ).apply {
         setShowGrid(false)
         emptyText.text = "No Actions configured"
         val headerFontMetrics = tableHeader.getFontMetrics(tableHeader.font)
@@ -97,30 +119,26 @@ private fun buildScopeActionsDetailTableComponent(tableModel: ScopeActionsTableM
         enabledColumn.preferredWidth = headerFontMetrics.stringWidth(getColumnName(1)) + JBUIScale.scale(20)
         enabledColumn.minWidth = enabledColumn.preferredWidth
     }
+
+    return panel {
+        row {
+            scrollCell(table).apply {
+                resizableColumn()
+                horizontalAlign(HorizontalAlign.FILL)
+                verticalAlign(VerticalAlign.FILL)
+            }
+        }.apply {
+            resizableRow()
+        }
+    }
 }
 
 /**
  * Build the main dialog component view
  */
 private fun buildMainDialogComponent(
-    scopeListComponent: JBList<SearchScope>,
-    scopeActionsTableComponent: JBTable
+    mainContent: JComponent
 ): DialogPanel {
-    val mainContent = OnePixelSplitter(false, 0.2f).apply {
-        firstComponent = scopeListComponent
-        secondComponent = panel {
-            row {
-                scrollCell(scopeActionsTableComponent).apply {
-                    resizableColumn()
-                    horizontalAlign(HorizontalAlign.FILL)
-                    verticalAlign(VerticalAlign.FILL)
-                }
-            }.apply {
-                resizableRow()
-            }
-        }
-    }
-
     return panel {
         row {
             cell(mainContent).apply {

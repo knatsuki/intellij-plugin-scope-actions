@@ -5,24 +5,13 @@ import com.mukatalab.scopeActions.services.ScopeActionsProjectConfigState
 import javax.swing.table.AbstractTableModel
 
 class ScopeActionsTableModel(
-    selectedScope: SearchScope,
+    val selectedScope: SearchScope,
+    val scopeActionsProjectConfigState: ScopeActionsProjectConfigState,
     val scopeActionTypes: List<String>,
-    scopeActionsProjectConfigState: ScopeActionsProjectConfigState = ScopeActionsProjectConfigState()
 ) : AbstractTableModel() {
-    var scopeActionsProjectConfigState: ScopeActionsProjectConfigState = scopeActionsProjectConfigState
-        set(value) {
-            field = value
-            fireTableDataChanged()
-        }
     private val selectedScopeName: String
         get() = selectedScope.displayName
 
-
-    var selectedScope: SearchScope = selectedScope
-        set(value) {
-            field = value
-            fireTableDataChanged()
-        }
 
     private val _columnNames = arrayOf("Scope Name", "Enabled", "Action ID")
     private val _columnClasses = arrayOf(String::class.java, Boolean::class.java, String::class.java)
