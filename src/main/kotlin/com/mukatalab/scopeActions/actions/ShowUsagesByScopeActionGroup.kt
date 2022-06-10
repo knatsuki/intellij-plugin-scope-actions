@@ -6,12 +6,12 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.project.Project
-import com.mukatalab.jumpy.actions.FindUsagesByScopeAction
+import com.mukatalab.jumpy.actions.ShowUsagesByScopeAction
 import com.mukatalab.scopeActions.getScopeActionTypeName
 import com.mukatalab.scopeActions.getUserDefinedSearchScopes
 import com.mukatalab.scopeActions.services.ScopeActionsProjectConfigService
 
-class FindUsagesByScopeActionGroup : ActionGroup() {
+class ShowUsagesByScopeActionGroup : ActionGroup() {
     override fun getChildren(e: AnActionEvent?): Array<AnAction> {
         val project: Project = e?.project ?: throw IllegalStateException()
         val dataContext: DataContext = e.dataContext
@@ -24,18 +24,18 @@ class FindUsagesByScopeActionGroup : ActionGroup() {
         for (scope in userDefinedScopes) {
             if (scopeActionsService.state.getEnabled(
                     scope.displayName,
-                    getScopeActionTypeName(FindUsagesByScopeAction::class)
+                    getScopeActionTypeName(ShowUsagesByScopeAction::class)
                 )
             ) {
-                val scopeAction = FindUsagesByScopeAction(
+                val scopeAction = ShowUsagesByScopeAction(
                     scope,
-                    "Find Usages by Scope: ${scope.displayName}"
+                    "Show Usages by Scope: ${scope.displayName}"
                 )
                 scopeActions.add(scopeAction)
                 actionManagerService.registerAction(
                     scopeActionsService.state.getActionId(
                         scope.displayName,
-                        getScopeActionTypeName(FindUsagesByScopeAction::class)
+                        getScopeActionTypeName(ShowUsagesByScopeAction::class)
                     ),
                     scopeAction
                 )

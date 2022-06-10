@@ -20,7 +20,7 @@ class ScopeActionsProjectSettingsConfigurable(private val project: Project) : Co
     override fun createComponent(): JComponent? {
         view = ScopeActionsProjectSettingsView(
             userDefinedScopes,
-            scopeActionsProjectConfigService.availableScopeActionTypes
+            scopeActionsProjectConfigService.scopeActionTypeNames
         )
         return view?.mainPanelComponent
     }

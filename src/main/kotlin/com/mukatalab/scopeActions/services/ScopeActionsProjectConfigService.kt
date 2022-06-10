@@ -2,6 +2,9 @@ package com.mukatalab.scopeActions.services
 
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
+import com.mukatalab.jumpy.actions.FindUsagesByScopeAction
+import com.mukatalab.jumpy.actions.ShowUsagesByScopeAction
+import com.mukatalab.scopeActions.getScopeActionTypeName
 
 @State(
     name = "com.mukatalab.scopeActions.settings.ScopeActionsConfigurationService",
@@ -14,10 +17,10 @@ import com.intellij.openapi.project.Project
 class ScopeActionsProjectConfigService() :
     PersistentStateComponent<ScopeActionsProjectConfigState> {
     private var _state: ScopeActionsProjectConfigState = ScopeActionsProjectConfigState()
-    private val actionTypes = listOf("ShowUsagesByScope", "FindUsagesByScope")
+    private var scopeActions = listOf(ShowUsagesByScopeAction::class, FindUsagesByScopeAction::class)
 
-    val availableScopeActionTypes: List<String>
-        get() = actionTypes
+    val scopeActionTypeNames: List<String>
+        get() = scopeActions.map { getScopeActionTypeName(it) }
 
     fun setState(value: ScopeActionsProjectConfigState) {
         _state = value

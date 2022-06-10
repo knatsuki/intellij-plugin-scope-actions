@@ -20,5 +20,9 @@
                class="com.mukatalab.scopeActions.actions.FindUsagesByScopeActionGroup" text="Find Usages By Scope">
             <add-to-group group-id="FindUsagesMenuGroup" anchor="last"/>
         </group>
+        <group id="com.mukatalab.scopeActions.actions.ShowUsagesByScopeActionGroup"
+               class="com.mukatalab.scopeActions.actions.ShowUsagesByScopeActionGroup" text="Show Usages By Scope">
+            <add-to-group group-id="FindUsagesMenuGroup" anchor="last"/>
+        </group>
     </actions>
 </idea-plugin>
