@@ -58,7 +58,7 @@ data class ScopeActionsProjectConfigState(var overrides: MutableList<ScopeAction
 
     private object ScopeActionsDefault {
         fun getDefaultActionId(scopeName: String, scopeActionType: String): String {
-            return "${scopeActionType}${pascalCaseName(scopeName)}"
+            return "${scopeActionType}In${pascalCaseName(scopeName)}"
         }
 
         fun getDefaultEnabled(scopeName: String, scopeActionType: String): Boolean {

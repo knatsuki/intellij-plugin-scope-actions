@@ -13,7 +13,7 @@ class ScopeActionsTableModel(
         get() = selectedScope.displayName
 
 
-    private val _columnNames = arrayOf("Scope Name", "Enabled", "Action ID")
+    private val _columnNames = arrayOf("Scope Action Type", "Enabled", "Action ID")
     private val _columnClasses = arrayOf(String::class.java, Boolean::class.java, String::class.java)
 
 

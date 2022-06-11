@@ -1,10 +1,6 @@
 package com.mukatalab.scopeActions.actions
 
-import com.intellij.openapi.actionSystem.ActionGroup
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.DataContext
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.Project
 import com.mukatalab.jumpy.actions.FindUsagesByScopeAction
 import com.mukatalab.scopeActions.getScopeActionTypeName
@@ -43,5 +39,10 @@ class FindUsagesByScopeActionGroup : ActionGroup() {
         }
 
         return scopeActions.toTypedArray()
+    }
+
+
+    override fun update(e: AnActionEvent) {
+        e.presentation.isVisible = e.getData(CommonDataKeys.PSI_ELEMENT) != null
     }
 }
