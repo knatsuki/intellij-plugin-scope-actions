@@ -9,7 +9,7 @@ import com.mukatalab.scopeActions.services.ScopeActionsProjectConfigService
 
 class FindUsagesByScopeActionGroup : ActionGroup() {
     override fun getChildren(e: AnActionEvent?): Array<AnAction> {
-        val project: Project = e?.project ?: throw IllegalStateException()
+        val project: Project = e?.project ?: return arrayOf()
         val dataContext: DataContext = e.dataContext
         val userDefinedScopes = getUserDefinedSearchScopes(project, dataContext)
 
