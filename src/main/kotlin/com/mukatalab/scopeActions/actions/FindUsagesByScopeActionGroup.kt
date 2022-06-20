@@ -14,7 +14,7 @@ class FindUsagesByScopeActionGroup(private var children: Array<AnAction> = array
     }
 
     fun loadChildren(project: Project) {
-        val pluginId: PluginId = PluginId.findId("com.mukatalab.scopeActions") ?: return
+        val pluginId = PluginId.findId("com.mukatalab.scopeActions") ?: return
         val userDefinedScopes = getUserDefinedSearchScopes(project, DataContext.EMPTY_CONTEXT)
 
         val scopeActionsService = ScopeActionsProjectConfigService.getInstance(project)

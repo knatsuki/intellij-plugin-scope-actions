@@ -5,6 +5,7 @@ import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.Project
 import com.intellij.psi.search.SearchScope
 import com.intellij.psi.search.SearchScopeProvider
+import com.intellij.ui.dsl.builder.panel
 import com.mukatalab.scopeActions.services.ScopeActionsProjectConfigService
 import javax.swing.JComponent
 
@@ -18,6 +19,13 @@ class ScopeActionsProjectSettingsConfigurable(private val project: Project) : Co
     }
 
     override fun createComponent(): JComponent? {
+        if (userDefinedScopes.isEmpty()) {
+            return panel {
+                row {
+                    text("You must first create custom scopes in File | Settings | Appearance & Behavior | Scopes.<br/> Please do so and restart IDE.")
+                }
+            }
+        }
         view = ScopeActionsProjectSettingsView(
             userDefinedScopes,
             scopeActionsProjectConfigService.scopeActionTypeNames

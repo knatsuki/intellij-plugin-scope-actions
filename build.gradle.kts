@@ -24,7 +24,6 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation("com.intellij.ui.dsl")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-params")
 }
