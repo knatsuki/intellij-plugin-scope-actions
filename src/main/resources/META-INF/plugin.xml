@@ -14,15 +14,14 @@
                 instance="com.mukatalab.scopeActions.settings.ScopeActionsProjectSettingsConfigurable"
                 id="com.mukatalab.scopeActions.settings.ScopeActionsProjectSettingsConfigurable"
         />
+        <postStartupActivity implementation="com.mukatalab.scopeActions.extensionPoints.ScopeActionsInitialization"/>
     </extensions>
     <actions>
-        <group id="com.mukatalab.scopeActions.actions.FindUsagesByScopeActionGroup"
+        <group id="scopeActions.FindUsagesByScopeActionGroup"
                class="com.mukatalab.scopeActions.actions.FindUsagesByScopeActionGroup" text="Find Usages By Scope">
-            <add-to-group group-id="FindUsagesMenuGroup" anchor="last"/>
         </group>
-        <group id="com.mukatalab.scopeActions.actions.ShowUsagesByScopeActionGroup"
+        <group id="scopeActions.ShowUsagesByScopeActionGroup"
                class="com.mukatalab.scopeActions.actions.ShowUsagesByScopeActionGroup" text="Show Usages By Scope">
-            <add-to-group group-id="FindUsagesMenuGroup" anchor="last"/>
         </group>
     </actions>
 </idea-plugin>

@@ -49,7 +49,7 @@ You can register them in your `.ideavimrc` file as well.
 
 ```text
 " Shortcut for calling action group
-nnoremap <leader>fus :action com.mukatalab.scopeActions.actions.FindUsagesByScopeActionGroup<CR>
+nnoremap <leader>fus :action scopeActions.FindUsagesByScopeActionGroup<CR>
 " Shortcut for calling individual scope action
 nnoremap <leader>fum :action FindUsagesByScopeInModels<CR>
 ```
