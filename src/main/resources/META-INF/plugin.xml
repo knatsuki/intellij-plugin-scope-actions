@@ -2,7 +2,7 @@
 <idea-plugin>
     <id>com.mukatalab.scopeActions</id>
     <name>Scope Actions</name>
-    <idea-version since-build="232.1"/>
+    <idea-version since-build="233.1"/>
     <vendor email="kuni.natsuki@gmail.com">MukataLab</vendor>
 
     <depends>com.intellij.modules.platform</depends>
